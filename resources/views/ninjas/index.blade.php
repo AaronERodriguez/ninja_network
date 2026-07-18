@@ -6,9 +6,18 @@
 </head>
 <body>
     <h2>Currently Available Ninjas</h2>
-    
+
+    @if($greeting == 'hello')
+        <p>Hi from inside the if statement</p>
+    @endif
+
     <ul>
-        <li>Ninjas Here</li>
+        @foreach($ninjas as $ninja)
+            <li>
+                <p>{{$ninja['name']}}</p>
+                <a href="/ninjas/{{$ninja['id']}}">View Details</a>
+            </li>
+        @endforeach
     </ul>
 </body>
 </html>

@@ -5,6 +5,7 @@
         <p><strong>Skill level:</strong> {{$ninja->skill}}</p>
         <p><strong>About me:</strong></p>
         <p>{{$ninja->bio}}</p>
+        <p><strong>User:</strong> {{$ninja->user->name}}</p>
     </div>
 
     <div class="border-2 border-dashed bg-white px-4 pb-4 my-4 rounded">
@@ -18,9 +19,10 @@
     <form action="{{route('ninjas.destroy', $ninja->id)}}" method="POST">
         @csrf
         @method('DELETE')
-
-        <button class="btn my-4" type="submit">
-            Delete Ninja
-        </button>
+        @can('delete', $ninja)
+            <button class="btn my-4" type="submit">
+                Delete Ninja
+            </button>
+        @endcan
     </form>
 </x-layout>

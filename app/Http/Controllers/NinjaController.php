@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ninja;
 use App\Models\Dojo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class NinjaController extends Controller
 {
@@ -32,13 +33,15 @@ class NinjaController extends Controller
            'name' => 'required|string|max:255',
            'skill'=> 'required|integer|min:0|max:100',
            'bio' => 'required|string|min:20|max:1000',
-           'dojo_id' => 'required|exists:dojos,id'
+           'dojo_id' => 'required|exists:dojos,id',
         ]);
-        $ninja = Ninja::create($validated);
+        $ninja = Ninja::create(array_merge($validated, ['user_id' => auth()->id()]));
 
         return redirect()->route('ninjas.index')->with('success', "Ninja '{$ninja->name}' Created!");
     }
     public function destroy(Ninja $ninja) {
+        Gate::authorize('delete', $ninja);
+
         $ninja->delete();
         return redirect()->route('ninjas.index')->with('success', "Ninja '{$ninja->name}' Deleted!");
     }
